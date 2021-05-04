@@ -4,16 +4,16 @@ using System.Linq;
 
 namespace Maze
 {
-    public class Dijkstra
+    public class AStar
     {
         public IEnumerable<Cell> Solve(Maze maze)
         {
             var startCell = maze.Start;
             var endCell = maze.End;
 
-            var openSet = new Dictionary<Cell, int>
+            var openSet = new Dictionary<Cell, double>
             {
-                [startCell] = 0
+                [startCell] = h(startCell, endCell)
             };
 
             var cameFrom = new Dictionary<Cell, Cell>();
@@ -43,13 +43,16 @@ namespace Maze
                     {
                         cameFrom[neighbor] = current;
                         gScore[neighbor] = tentativeScore;
-                        openSet[neighbor] = tentativeScore;
+                        openSet[neighbor] = tentativeScore + h(neighbor, endCell);
                     }
                 }
             }
 
             throw new Exception("No solution.");
         }
+
+        private double h(Cell cell, Cell end) 
+            => cell.Position.Distance(end.Position);
 
         private IEnumerable<Cell> ReconstructPath(Dictionary<Cell, Cell> cameFrom, Cell current)
         {

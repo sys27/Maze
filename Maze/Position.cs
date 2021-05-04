@@ -5,10 +5,7 @@ namespace Maze
     public readonly struct Position : IEquatable<Position>
     {
         public Position(int x, int y)
-        {
-            X = x;
-            Y = y;
-        }
+            => (X, Y) = (x, y);
 
         public bool Equals(Position other)
             => X == other.X && Y == other.Y;
@@ -39,6 +36,9 @@ namespace Maze
 
         public Position Down()
             => new Position(X, Y + 1);
+
+        public double Distance(Position other)
+            => Math.Sqrt(Math.Pow(X - other.X, 2) + Math.Pow(Y - other.Y, 2));
 
         public int X { get; }
         public int Y { get; }

@@ -11,7 +11,7 @@ namespace Maze
         public static async Task Main(string[] args)
         {
             if (args.Length == 0)
-                args = new[] { "200x200.png" };
+                args = new[] { "20x20.png" };
 
             using var image = await Image.LoadAsync<Rgba32>(args[0]);
             var maze = Maze.FromImage(image);
@@ -28,6 +28,14 @@ namespace Maze
 
             var dijkstra = new Dijkstra();
             solution = dijkstra.Solve(maze);
+
+            sw.Stop();
+            Console.WriteLine($"Time: {sw.ElapsedMilliseconds} ms.");
+
+            sw = Stopwatch.StartNew();
+
+            var astar = new AStar();
+            solution = astar.Solve(maze);
 
             sw.Stop();
             Console.WriteLine($"Time: {sw.ElapsedMilliseconds} ms.");
