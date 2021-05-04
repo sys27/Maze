@@ -51,6 +51,12 @@ namespace Maze
             => Type == CellKind.Pass;
 
         public CellKind Type { get; }
+
         public Position Position { get; }
+
+        // TODO: current implementation has the hardcoded weight
+        // which makes Dijkstra's algorithm useless
+        // it works the same as BFS
+        public int Weight => 1;
     }
 }

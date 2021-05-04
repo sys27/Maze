@@ -4,18 +4,19 @@ namespace Maze
 {
     public class PathNode
     {
-        public PathNode(Cell cell) : this(cell, null)
+        public PathNode(Cell cell) : this(cell, null, 0)
         {
         }
 
-        private PathNode(Cell cell, PathNode parent)
+        private PathNode(Cell cell, PathNode parent, int weight)
         {
             Cell = cell;
             Parent = parent;
+            Weight = weight;
         }
 
         public PathNode Append(Cell cell)
-            => new PathNode(cell, this);
+            => new PathNode(cell, this, Weight + cell.Weight);
 
         public IEnumerable<Cell> GetPath()
         {
@@ -34,5 +35,6 @@ namespace Maze
 
         public Cell Cell { get; }
         public PathNode Parent { get; }
+        public int Weight { get; }
     }
 }

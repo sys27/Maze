@@ -3,21 +3,23 @@ using System.Collections.Generic;
 
 namespace Maze
 {
-    public class Bfs
+    public class Dijkstra
     {
         public IEnumerable<Cell> Solve(Maze maze)
         {
-            var queue = new Queue<PathNode>();
+            var queue = new Dictionary<Cell, PathNode>();
             var visited = new HashSet<Cell>(maze.Height * maze.Width);
 
             var startCell = maze.Start;
             var endCell = maze.End;
 
-            queue.Enqueue(new PathNode(startCell));
+            queue[startCell] = new PathNode(startCell);
 
             while (queue.Count > 0)
             {
-                var pathNode = queue.Dequeue();
+                var pathNode = queue.Values.MinBy(x => x.Weight);
+                queue.Remove(pathNode.Cell);
+
                 var cell = pathNode.Cell;
 
                 if (cell.Equals(endCell))
@@ -29,7 +31,15 @@ namespace Maze
                     foreach (var neighbor in neighbors)
                     {
                         var newPath = pathNode.Append(neighbor);
-                        queue.Enqueue(newPath);
+                        if (queue.TryGetValue(neighbor, out var existingPath))
+                        {
+                            if (newPath.Weight < existingPath.Weight)
+                                queue[neighbor] = newPath;
+                        }
+                        else
+                        {
+                            queue[neighbor] = newPath;
+                        }
                     }
                 }
 
